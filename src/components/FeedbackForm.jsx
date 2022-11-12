@@ -1,32 +1,77 @@
-
 import { useState } from 'react'
+import RatingSelect from './RatingSelect.jsx'
 import Card from './shared/Card'
 import Button from './shared/Button'
 
-function FeedbackForm(){
-    const [text, setText] = useState('')
 
-    const hanldeTextChange = (e)=> {
-        setText(e.target.value)
+function FeedbackForm({handleAdd}) {
+  const [text, setText] = useState('')
+  const [rating, setRating] = useState(10)
+  const [btnDisabled, setBtnDisabled] = useState(true)
+  const [message, setMessage] = useState('')
+
+
+
+
+
+  // NOTE: This should be checking input value not state as state won't be the updated value until the next render of the component
+
+  // prettier-ignore
+  const handleTextChange = ({ target: { value } }) => { // 👈  get the value
+    if (value === '') {
+      setBtnDisabled(true)
+      setMessage(null)
+      
+  // prettier-ignore
+    } else if (value.trim().length < 10) { // 👈 check for less than 10
+      setMessage('Text must be at least 10 characters')
+      setBtnDisabled(true)
+    } else {
+      setMessage(null)
+      setBtnDisabled(false)
     }
+    setText(value)
+  }
 
-    return (
-        <Card>
-            <form>
-                <h2>How would you rate your service with us?</h2>
-                {/* @todo - rating select component */}
-                <div className="input-group">
-                    <input onChange={hanldeTextChange} 
-                    type="text"
-                    placeholder='Write a review'
-                    value={text} />   
-                    <Button type='submit' >
-                        Send
-                    </Button>
-                </div>
-            </form>
-        </Card>
-    )
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (text.trim().length > 10) {
+      const newFeedback = {
+        text,
+        rating,
+      }
+
+      handleAdd(newFeedback)
+
+      // NOTE: reset to default state after submission
+      setBtnDisabled(true) 
+      setRating(10) 
+      setText('')
+    }
+  }
+
+  // NOTE: pass selected to RatingSelect so we don't need local duplicate state
+  return (
+    <Card>
+      <form onSubmit={handleSubmit}>
+        <h2>How would you rate your service with us?</h2>
+        <RatingSelect select={setRating} selected={rating} />
+        <div className='input-group'>
+          <input
+            onChange={handleTextChange}
+            type='text'
+            placeholder='Write a review'
+            value={text}
+          />
+          <Button type='submit' isDisabled={btnDisabled}>
+            Send
+          </Button>
+        </div>
+
+        {message && <div className='message'>{message}</div>}
+      </form>
+    </Card>
+  )
 }
 
 export default FeedbackForm
