@@ -5,6 +5,8 @@ import FeedbackData from "./data/FeedbackData"
 import FeedbackStats from "./components/FeedbackStats"
 import FeedbackFrom from "./components/FeedbackFrom"
 import {v4 as uuidv4} from 'uuid'
+import {motion,AnimatePresence} from 'framer-motion'
+
 
 
 function App(){
