@@ -3,7 +3,7 @@ import { useState } from "react"
 import Button from "./shared/Button"
 import RatingSelect from "./RatingSelect"
 
-function FeedbackFrom({handleAdd}) {
+function FeedBackForm({handleAdd}) {
   const [text,setText] = useState('')
   const [rating,setRating] = useState(10)
   const [btnDisabled,setBtnDisabled] = useState(true)
@@ -58,4 +58,4 @@ const handleSubmit = (e) => {
   )
 }
 
-export default FeedbackFrom
+export default FeedBackForm
